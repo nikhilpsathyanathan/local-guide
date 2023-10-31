@@ -10,6 +10,7 @@ const config: Config = {
     colors: {
       transparent: "transparent",
       white: "#ffffff",
+      black: "#000000",
       pink: "#E71575",
       gray: "##C4C4C4",
     },
