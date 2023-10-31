@@ -4,7 +4,7 @@ import { Header } from "@/components/nav/Header";
 import { DEFAULT_SEARCH_PARAMS } from "@/constants";
 import { HostsAPIResponse } from "@/models/api.model";
 
-export const revalidate = 300;
+export const revalidate = 1;
 
 type SearchParams = {
   country?: string;
@@ -28,20 +28,9 @@ async function getData(searchParams: SearchParams) {
 
   const data = (await res.json()) as HostsAPIResponse;
 
-  // filter the required data from the response
-  const guides = data.results.hits.hits.map((host) => {
-    return {
-      id: host._id,
-      name: host._source.name,
-      title: host._source.personal_title,
-      photo: host._source.photo,
-      spokenLanguages: host._source.spoken_languages,
-    };
-  });
-
   //find unique languages from the spokenLanguages array
-  const spokenLanguages = guides.reduce((acc, host) => {
-    host.spokenLanguages.forEach((language) => {
+  const spokenLanguages = data.results.hits.hits.reduce((acc, host) => {
+    host._source.spoken_languages.forEach((language) => {
       if (!acc.includes(language)) {
         acc.push(language);
       }
@@ -53,14 +42,24 @@ async function getData(searchParams: SearchParams) {
     ? []
     : searchParams.sLang.split("|");
 
-  //  assumed that speaker should know all the languages selected by the user
-  const filteredGuides = guides.filter((guide) =>
-    selectedLanguages.every((language) =>
-      guide.spokenLanguages.includes(language)
+  // filter the required data from the response
+  const guides = data.results.hits.hits
+    .filter((host) =>
+      selectedLanguages.every((language) =>
+        host._source.spoken_languages.includes(language)
+      )
     )
-  );
+    .map((host) => {
+      return {
+        id: host._id,
+        name: host._source.name,
+        title: host._source.personal_title,
+        photo: host._source.photo,
+        spokenLanguages: host._source.spoken_languages,
+      };
+    });
 
-  return { guides: filteredGuides, spokenLanguages, selectedLanguages };
+  return { guides, spokenLanguages, selectedLanguages };
 }
 
 export default async function Home({
