@@ -7,6 +7,7 @@ type GuidesProps = {
   guides: GuideType[];
 };
 
+//  assumed that speaker should know all the languages selected by the user
 const getFilteredGuides = (
   guides: GuideType[],
   selectedLanguages: string[]
@@ -14,8 +15,8 @@ const getFilteredGuides = (
   return selectedLanguages.length == 0
     ? guides
     : guides.filter((guide) => {
-        return guide.spokenLanguages.some((language) =>
-          selectedLanguages.includes(language)
+        return selectedLanguages.every((language) =>
+          guide.spokenLanguages.includes(language)
         );
       });
 };
