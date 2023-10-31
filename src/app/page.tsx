@@ -1,6 +1,7 @@
 import { API } from "@/api/index.api";
 import { Guides } from "@/components/guide";
 import { Header } from "@/components/nav/Header";
+import { DEFAULT_SEARCH_PARAMS } from "@/constants";
 import { HostsAPIResponse } from "@/models/api.model";
 
 export const revalidate = 3600;
@@ -12,9 +13,9 @@ type SearchParams = {
 };
 
 async function getData(searchParams: SearchParams) {
-  searchParams.country = searchParams?.country ?? "italy";
-  searchParams.city = searchParams?.city ?? "rome";
-  searchParams.lang = searchParams?.lang ?? "en";
+  searchParams.country = searchParams?.country ?? DEFAULT_SEARCH_PARAMS.country;
+  searchParams.city = searchParams?.city ?? DEFAULT_SEARCH_PARAMS.city;
+  searchParams.lang = searchParams?.lang ?? DEFAULT_SEARCH_PARAMS.lang;
 
   const res = await fetch(
     API.getHosts(searchParams.country, searchParams.city, searchParams.lang)
@@ -58,9 +59,12 @@ export default async function Home({
   const { guides, spokenLanguages } = await getData(searchParams);
 
   return (
-    <main className="flex min-h-screen  flex-col text-primary ">
+    <main className="flex min-h-screen h-full w-full flex-col text-primary">
       <Header spokenLanguages={spokenLanguages} />
-      <Guides guides={guides} />
+      <Guides
+        city={searchParams.city ?? DEFAULT_SEARCH_PARAMS.city}
+        guides={guides}
+      />
     </main>
   );
 }

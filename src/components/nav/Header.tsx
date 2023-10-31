@@ -1,5 +1,6 @@
 "use client";
 import { useGuideStore } from "@/store/hosts.store";
+import { Checkbox } from "../ui";
 
 type HeaderProps = {
   spokenLanguages: string[];
@@ -14,23 +15,16 @@ export const Header = ({ spokenLanguages }: HeaderProps) => {
         <ul className="flex gap-10 items-center flex-wrap">
           {spokenLanguages.map((language) => (
             <li key={language}>
-              <div className="w-fit shrink-0 flex gap-4 relative items-center">
-                <input
-                  id={language}
-                  className="peer shrink-0 appearance-none w-6 h-6 border border-1  border-gray bg-white focus:outline-none checked:border-pink rounded"
-                  type="checkbox"
-                  checked={selectedLanguages.includes(language)}
-                  onChange={(event) => {
-                    event.target.checked
-                      ? addLanguages(language)
-                      : removeLanguage(language);
-                  }}
-                />
-                <div className="absolute inset-y-[5px] left-[5px] w-[14px] h-[14px] rounded peer-checked:bg-pink  pointer-events-none"></div>
-                <label htmlFor={language} className="font-semibold text-[14px]">
-                  {language}
-                </label>
-              </div>
+              <Checkbox
+                id={language}
+                label={language}
+                checked={selectedLanguages.includes(language)}
+                onChange={(event) => {
+                  event.target.checked
+                    ? addLanguages(language)
+                    : removeLanguage(language);
+                }}
+              />
             </li>
           ))}
         </ul>
