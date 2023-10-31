@@ -1,8 +1,12 @@
+"use client";
+import { useGuideStore } from "@/store/hosts.store";
+
 type HeaderProps = {
   spokenLanguages: string[];
 };
 
 export const Header = ({ spokenLanguages }: HeaderProps) => {
+  const { selectedLanguages, addLanguages, removeLanguage } = useGuideStore();
   return (
     <section className=" pt-4 pb-[21px] shadow-small ">
       <nav className="space-y-3 max-w-screen-lg mx-auto">
@@ -15,6 +19,12 @@ export const Header = ({ spokenLanguages }: HeaderProps) => {
                   id={language}
                   className="peer shrink-0 appearance-none w-6 h-6 border border-1  border-gray bg-white focus:outline-none checked:border-pink rounded"
                   type="checkbox"
+                  checked={selectedLanguages.includes(language)}
+                  onChange={(event) => {
+                    event.target.checked
+                      ? addLanguages(language)
+                      : removeLanguage(language);
+                  }}
                 />
                 <div className="absolute inset-y-[5px] left-[5px] w-[14px] h-[14px] rounded peer-checked:bg-pink  pointer-events-none"></div>
                 <label htmlFor={language} className="font-semibold text-[14px]">
