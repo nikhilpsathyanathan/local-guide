@@ -13,19 +13,19 @@ const config: Config = {
       pink: "#E71575",
       gray: "##C4C4C4",
     },
+    boxShadow: {
+      small: "0px 4px 16px 0px rgba(0, 0, 0, 0.15)",
+    },
     extend: {
       textColor: {
-        DEFAULT: "##4A4A4A",
-        primary: "##4A4A4A",
-      },
-      boxShadow: {
-        small: "0px 4px 16px 0px rgba(0, 0, 0, 0.15)",
+        DEFAULT: "#4A4A4A",
+        primary: "#4A4A4A",
       },
       fontFamily: {
         roboto: ["var(--roboto-font)"],
       },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [],
 };
 export default config;
