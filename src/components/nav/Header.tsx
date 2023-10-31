@@ -9,7 +9,7 @@ type HeaderProps = {
 export const Header = ({ spokenLanguages }: HeaderProps) => {
   const { selectedLanguages, addLanguages, removeLanguage } = useGuideStore();
   return (
-    <section className=" pt-4 pb-[21px] shadow-small ">
+    <section className=" pt-4 pb-[21px] shadow-small w-full sticky top-0 z-10 bg-white">
       <nav className="space-y-3 max-w-screen-lg mx-auto">
         <h1 className="text-xl font-semibold">Local guide language</h1>
         <ul className="flex gap-10 items-center flex-wrap">
