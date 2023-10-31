@@ -16,9 +16,13 @@ const config: Config = {
     extend: {
       textColor: {
         DEFAULT: "##4A4A4A",
+        primary: "##4A4A4A",
       },
       boxShadow: {
         small: "0px 4px 16px 0px rgba(0, 0, 0, 0.15)",
+      },
+      fontFamily: {
+        roboto: ["var(--roboto-font)"],
       },
     },
   },

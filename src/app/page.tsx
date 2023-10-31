@@ -1,4 +1,5 @@
 import { API } from "@/api/index.api";
+import { Header } from "@/components/nav/Header";
 import { HostsAPIResponse } from "@/models/api.model";
 
 export const revalidate = 3600;
@@ -56,9 +57,8 @@ export default async function Home({
   console.log(host);
 
   return (
-    <main
-      className="flex min-h-screen flex-col items-center justify-between
-    "
-    ></main>
+    <main className="flex min-h-screen flex-col items-center justify-between text-primary ">
+      <Header />
+    </main>
   );
 }
