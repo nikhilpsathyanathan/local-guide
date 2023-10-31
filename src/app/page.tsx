@@ -57,8 +57,8 @@ export default async function Home({
   console.log(host);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between text-primary ">
-      <Header />
+    <main className="flex min-h-screen  flex-col text-primary ">
+      <Header spokenLanguages={spokenLanguages} />
     </main>
   );
 }
