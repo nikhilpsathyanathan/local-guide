@@ -1,4 +1,5 @@
 import { API } from "@/api/index.api";
+import { Guides } from "@/components/guide";
 import { Header } from "@/components/nav/Header";
 import { HostsAPIResponse } from "@/models/api.model";
 
@@ -26,16 +27,18 @@ async function getData(searchParams: SearchParams) {
   const data = (await res.json()) as HostsAPIResponse;
 
   // filter the required data from the response
-  const host = data.results.hits.hits.map((host) => {
+  const guides = data.results.hits.hits.map((host) => {
     return {
+      id: host._id,
       name: host._source.name,
+      title: host._source.personal_title,
       photo: host._source.photo,
       spokenLanguages: host._source.spoken_languages,
     };
   });
 
   //find unique languages from the spokenLanguages array
-  const spokenLanguages = host.reduce((acc, host) => {
+  const spokenLanguages = guides.reduce((acc, host) => {
     host.spokenLanguages.forEach((language) => {
       if (!acc.includes(language)) {
         acc.push(language);
@@ -44,7 +47,7 @@ async function getData(searchParams: SearchParams) {
     return acc;
   }, [] as string[]);
 
-  return { host, spokenLanguages };
+  return { guides, spokenLanguages };
 }
 
 export default async function Home({
@@ -52,13 +55,12 @@ export default async function Home({
 }: {
   searchParams: SearchParams;
 }) {
-  const { host, spokenLanguages } = await getData(searchParams);
-
-  console.log(host);
+  const { guides, spokenLanguages } = await getData(searchParams);
 
   return (
     <main className="flex min-h-screen  flex-col text-primary ">
       <Header spokenLanguages={spokenLanguages} />
+      <Guides guides={guides} />
     </main>
   );
 }
