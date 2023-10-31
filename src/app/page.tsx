@@ -4,7 +4,7 @@ import { Header } from "@/components/nav/Header";
 import { DEFAULT_SEARCH_PARAMS } from "@/constants";
 import { HostsAPIResponse } from "@/models/api.model";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 type SearchParams = {
   country?: string;
