@@ -10,6 +10,7 @@ type SearchParams = {
   country?: string;
   city?: string;
   lang?: string;
+  sLang?: string;
 };
 
 async function getData(searchParams: SearchParams) {
@@ -48,7 +49,18 @@ async function getData(searchParams: SearchParams) {
     return acc;
   }, [] as string[]);
 
-  return { guides, spokenLanguages };
+  const selectedLanguages = !searchParams.sLang
+    ? []
+    : searchParams.sLang.split("|");
+
+  //  assumed that speaker should know all the languages selected by the user
+  const filteredGuides = guides.filter((guide) =>
+    selectedLanguages.every((language) =>
+      guide.spokenLanguages.includes(language)
+    )
+  );
+
+  return { guides: filteredGuides, spokenLanguages, selectedLanguages };
 }
 
 export default async function Home({
@@ -56,11 +68,15 @@ export default async function Home({
 }: {
   searchParams: SearchParams;
 }) {
-  const { guides, spokenLanguages } = await getData(searchParams);
-
+  const { guides, spokenLanguages, selectedLanguages } = await getData(
+    searchParams
+  );
   return (
     <main className="flex min-h-screen h-full w-full flex-col text-primary">
-      <Header spokenLanguages={spokenLanguages} />
+      <Header
+        spokenLanguages={spokenLanguages}
+        selectedLanguages={selectedLanguages}
+      />
       <Guides
         city={searchParams.city ?? DEFAULT_SEARCH_PARAMS.city}
         guides={guides}

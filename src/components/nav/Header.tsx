@@ -1,13 +1,31 @@
 "use client";
-import { useGuideStore } from "@/store/hosts.store";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Checkbox } from "../ui";
 
 type HeaderProps = {
   spokenLanguages: string[];
+  selectedLanguages: string[];
 };
 
-export const Header = ({ spokenLanguages }: HeaderProps) => {
-  const { selectedLanguages, addLanguages, removeLanguage } = useGuideStore();
+export const Header = ({ spokenLanguages, selectedLanguages }: HeaderProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handleRouteChange = (language: string) => {
+    const updatedLanguages = selectedLanguages.includes(language)
+      ? selectedLanguages.filter((lang) => lang != language)
+      : [...selectedLanguages, language.trim()];
+
+    const params = new URLSearchParams(searchParams);
+
+    if (updatedLanguages.length === 0) {
+      params.delete("sLang");
+      router.push(`?${params.toString()}`);
+      return;
+    }
+    params.set("sLang", updatedLanguages.join("|"));
+    router.push(`?${params.toString()}`);
+  };
   return (
     <section className=" pt-4 pb-[21px] shadow-small w-full sticky top-0 z-10 bg-white">
       <nav className="space-y-3 max-w-screen-lg mx-auto">
@@ -19,10 +37,8 @@ export const Header = ({ spokenLanguages }: HeaderProps) => {
                 id={language}
                 label={language}
                 checked={selectedLanguages.includes(language)}
-                onChange={(event) => {
-                  event.target.checked
-                    ? addLanguages(language)
-                    : removeLanguage(language);
+                onChange={() => {
+                  handleRouteChange(language);
                 }}
               />
             </li>
